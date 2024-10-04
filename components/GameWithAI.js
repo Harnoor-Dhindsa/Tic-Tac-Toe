@@ -1,5 +1,3 @@
-// gamewithAI.js
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,9 +8,7 @@ const PLAYER_O = 'O';
 
 const GamewithAI = ({ navigation }) => {
   const [board, setBoard] = useState(Array(9).fill(null)); // Initialize with null values
-
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-
   const [aiMovesCount, setAiMovesCount] = useState(0);
 
   const handlePlayerMove = (index) => {
@@ -21,15 +17,7 @@ const GamewithAI = ({ navigation }) => {
       newBoard[index] = PLAYER_X;
       setBoard(newBoard);
       setIsPlayerTurn(false);
-    } else if (isPlayerTurn && aiMovesCount >= 4){
-      if (board[index] === PLAYER_O) {
-        const newBoard = [...board];
-        newBoard[index] = PLAYER_X;
-        setBoard(newBoard);
-        setIsPlayerTurn(true);
-        setAiMovesCount(aiMovesCount + 1);
-      }
-    }
+    } 
   };
 
   const checkWinner = (currentBoard) => {
@@ -79,7 +67,7 @@ const GamewithAI = ({ navigation }) => {
       if (!winner) {
         const timeoutId = setTimeout(() => {
           handleAIMove();
-        }, 100);
+        }, 500);
 
         return () => clearTimeout(timeoutId);
       } else {
@@ -159,9 +147,9 @@ const GamewithAI = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={44} color="white" />
+          <Ionicons name="arrow-back" size={30} color="white" />
         </TouchableOpacity>
-          <Text style={styles.heading}>Play with AI</Text>
+        <Text style={styles.heading}>Play with AI</Text>
       </View>
       <Board board={board} onClick={handlePlayerMove} />
     </View>
@@ -173,7 +161,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00022e',
+    backgroundColor: '#1e1e2d',
+    paddingHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
@@ -181,12 +170,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: 'white',
+    marginLeft: 10,
   },
   backButton: {
-    marginRight: 20,
+    padding: 10,
   },
 });
 

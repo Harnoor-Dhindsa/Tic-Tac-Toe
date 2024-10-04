@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Board from './Board';
+import PlayerSetup from '../components/others/PlayerSetup';
 
 const Game = ({ navigation }) => {
+  const [isSetupComplete, setIsSetupComplete] = useState(false);
+  const [players, setPlayers] = useState({});
   const [board, setBoard] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
+  const [currentPlayer, setCurrentPlayer] = useState(null);
+
+  const handleSetupComplete = (players) => {
+    setPlayers(players);
+    setCurrentPlayer(players.player1);
+    setIsSetupComplete(true);
+  };
 
   const handleClick = (i) => {
     const newBoard = [...board];
     if (calculateWinner(newBoard) || newBoard[i]) {
       return;
     }
-    newBoard[i] = xIsNext ? 'X' : 'O';
+    newBoard[i] = currentPlayer.symbol;
     setBoard(newBoard);
-    setXIsNext(!xIsNext);
+    setCurrentPlayer(currentPlayer === players.player1 ? players.player2 : players.player1);
   };
 
   const winner = calculateWinner(board);
@@ -26,33 +35,52 @@ const Game = ({ navigation }) => {
   const renderStatus = () => {
     const isDraw = board.every((square) => square !== null);
     if (winner) {
-      return <Text style={[styles.status, { color: winner.player === 'X' ? 'red' : 'yellow' }, {fontSize: 40, fontWeight: 'bold'}]}>Winner: {winner.player}</Text>;
+      return (
+        <View style={[styles.statusContainer, { backgroundColor: winner.player === players.player1.symbol ? '#d32f2f' : '#fbc02d' }]}>
+          <Text style={styles.statusText}>Winner: {winner.player === players.player1.symbol ? players.player1.name : players.player2.name}</Text>
+        </View>
+      );
     } else if (isDraw) {
-      return <Text style={[styles.status, { color: 'white' }, {fontSize: 40, fontWeight: 'bold'}]}>Draw</Text>;
+      return (
+        <View style={styles.statusContainer}>
+          <Text style={styles.statusText}>Draw</Text>
+        </View>
+      );
     } else {
       return (
         <View style={styles.turnContainer}>
-          <Text style={[styles.turnText, { color: xIsNext ? 'red' : 'grey' }, {fontSize: 50, fontWeight: 'bold', marginRight: 90}]}>X</Text>
-          <Text style={[styles.turnText, { color: xIsNext ? 'grey' : 'yellow' }, {fontSize: 50, fontWeight: 'bold'}]}>O</Text>
+          <Text style={[styles.turnText, { color: currentPlayer.symbol === 'X' ? '#d32f2f' : '#757575' }]}>
+            {players.player1.name} ({players.player1.symbol})
+          </Text>
+          <Text style={[styles.turnText, { color: currentPlayer.symbol === 'O' ? '#fbc02d' : '#757575' }]}>
+            {players.player2.name} ({players.player2.symbol})
+          </Text>
         </View>
       );
     }
   };
 
+  if (!isSetupComplete) {
+    return <PlayerSetup onSetupComplete={handleSetupComplete} />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={44} color="white" />
+          <Ionicons name="arrow-back" size={30} color="white" />
         </TouchableOpacity>
         <Text style={styles.heading}>Play with Friend</Text>
       </View>
       {renderStatus()}
       <Board board={board} onClick={handleClick} winner={winner} />
-      <TouchableOpacity 
-        onPress={() => setBoard(Array(9).fill(null))} 
-        style={[styles.button, {backgroundColor: 'red', borderRadius: 5, marginBottom: "20%",}]}>
-        <Text style={[styles.buttonText, {color: 'yellow'}]}>Reset Game</Text>
+      <TouchableOpacity
+        onPress={() => {
+          setBoard(Array(9).fill(null));
+          setCurrentPlayer(players.player1);
+        }}
+        style={styles.button}>
+        <Text style={styles.buttonText}>Reset Game</Text>
       </TouchableOpacity>
     </View>
   );
@@ -83,39 +111,55 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00022e',
+    backgroundColor: '#1e1e2d',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 20,
   },
   heading: {
-    fontSize: 34,
+    fontSize: 28,
     fontWeight: 'bold',
     color: 'white',
+    marginLeft: 10,
   },
   backButton: {
-    marginRight: 20,
+    padding: 10,
   },
-  status: {
+  statusContainer: {
     marginBottom: 20,
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
+  },
+  statusText: {
     fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
   },
   button: {
     marginTop: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    backgroundColor: '#d32f2f',
+    borderRadius: 5,
   },
   buttonText: {
     fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
   },
   turnContainer: {
     flexDirection: 'row',
+    marginBottom: 20,
   },
   turnText: {
-    fontSize: 24,
+    fontSize: 20,
     marginHorizontal: 10,
+    fontWeight: 'bold',
   },
 });
 

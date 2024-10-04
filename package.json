@@ -6,15 +6,27 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "proxy": "http://localhost:8081"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.2.3",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
-    "expo": "^51.0.2",
+    "cors": "^2.8.5",
+    "expo": "^51.0.36",
     "expo-status-bar": "^1.12.1",
+    "expo-updates": "^0.25.26",
+    "express": "^4.19.2",
+    "firebase": "^10.13.0",
     "react": "18.2.0",
-    "react-native": "^0.74.1"
+    "react-dom": "^18.2.0",
+    "react-native": "^0.75.4",
+    "react-native-web": "~0.19.10",
+    "react-native-websocket": "^1.0.2",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -1,13 +1,22 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const Board = ({ board, onClick, winner }) => {
+const Board5x5 = ({ board, onClick, winner }) => {
   const isWinningSquare = (i) => {
     if (!winner) {
       return false;
     }
     const winningSquares = winner.line;
     return winningSquares.includes(i);
+  };
+
+  const getSymbolColor = (symbol) => {
+    switch (symbol) {
+      case '₹': return '#d32f2f';  // Red
+      case '$': return '#fbc02d';  // Yellow
+      case '€': return '#4caf50';  // Green (Triangle)
+      default: return 'transparent';
+    }
   };
 
   return (
@@ -18,11 +27,11 @@ const Board = ({ board, onClick, winner }) => {
           style={[
             styles.square,
             isWinningSquare(i) ? styles.winningSquare : {},
-            { backgroundColor: square === 'X' ? '#d32f2f' : (square === 'O' ? '#fbc02d' : 'transparent') },
+            { backgroundColor: getSymbolColor(square) },
           ]}
           onPress={() => onClick(i)}
         >
-          <Text style={[styles.squareText, { color: square === 'X' ? '#000' : (square === 'O' ? '#000' : '#ffffff') }]}>
+          <Text style={styles.squareText}>
             {square}
           </Text>
         </TouchableOpacity>
@@ -35,19 +44,19 @@ const styles = StyleSheet.create({
   board: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 300,
-    height: 300,
+    width: 400,  // Adjusted for 5x5
+    height: 400, // Adjusted for 5x5
   },
   square: {
-    width: 100,
-    height: 100,
+    width: 80,  // Adjusted for 5x5
+    height: 80, // Adjusted for 5x5
     borderWidth: 2,
     borderColor: '#5c5f96',
     justifyContent: 'center',
     alignItems: 'center',
   },
   squareText: {
-    fontSize: 50,
+    fontSize: 40, // Adjusted for 5x5
     fontWeight: 'bold',
   },
   winningSquare: {
@@ -55,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Board;
+export default Board5x5;

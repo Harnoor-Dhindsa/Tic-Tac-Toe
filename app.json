@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TicTacToe",
-    "slug": "TicTacToe",
+    "slug": "tic-tac-toe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8b8a4f10-c742-4d4a-9b1f-c7cc380fc30b"
+      }
+    },
+    "owner": "harnoordhindsa",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8b8a4f10-c742-4d4a-9b1f-c7cc380fc30b"
     }
   }
 }
